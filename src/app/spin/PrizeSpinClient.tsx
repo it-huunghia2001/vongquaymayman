@@ -393,7 +393,7 @@ export default function PrizeSpinClient() {
                       top: "50%",
                       left: "50%",
                       // SỬA: Dùng calc để tính dựa trên kích thước container
-                      transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(calc(-50% - 245px))`,
+                      transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(calc(-50% - 26vh))`,
                       boxShadow: `0 0 10px ${color}`,
                       animationDelay: `${i * 0.05}s`,
                     }}
