@@ -1,62 +1,61 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
-import { useState } from "react"
-import type React from "react"
+"use client";
+import { useState } from "react";
+import type React from "react";
 
-import { useRouter } from "next/navigation"
-import { v4 as uuidv4 } from "uuid"
-import { LoadingModal } from "@/components/modalLoading"
-import "./page.css"
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { LoadingModal } from "@/components/modalLoading";
 export default function Home() {
-  const [licensePlate2, setLicensePlate2] = useState("")
-  const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
-  const router = useRouter()
-  const [err, setErr] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [licensePlate2, setLicensePlate2] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const router = useRouter();
+  const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setErr("")
-    setLoading(true)
+    e.preventDefault();
+    setErr("");
+    setLoading(true);
 
     try {
-      let deviceKey = localStorage.getItem("deviceKey")
+      let deviceKey = localStorage.getItem("deviceKey");
       if (!deviceKey) {
-        deviceKey = uuidv4()
-        localStorage.setItem("deviceKey", deviceKey)
+        deviceKey = uuidv4();
+        localStorage.setItem("deviceKey", deviceKey);
       }
-      const licensePlate = licensePlate2.replace(/[^a-zA-Z0-9]/g, "")
+      const licensePlate = licensePlate2.replace(/[^a-zA-Z0-9]/g, "");
       // ✅ Kiểm tra định dạng số điện thoại Việt Nam: 10–11 số bắt đầu bằng 0
-      const phoneRegex = /^0\d{9}$/
+      const phoneRegex = /^0\d{9}$/;
       if (!phoneRegex.test(phone)) {
-        setErr("Số điện thoại không hợp lệ.")
-        setLoading(false)
-        return
+        setErr("Số điện thoại không hợp lệ.");
+        setLoading(false);
+        return;
       }
 
       const res = await fetch("/api/check-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, phone, licensePlate }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (!res.ok) {
-        setErr(data.message || "Đã có lỗi xảy ra từ máy chủ.")
+        setErr(data.message || "Đã có lỗi xảy ra từ máy chủ.");
       } else if (data.allowed) {
-        router.push(`/spin?phone=${phone}&plateNumber=${licensePlate}`)
+        router.push(`/spin?phone=${phone}&plateNumber=${licensePlate}`);
       } else {
-        setErr(data.message || "Bạn không được phép tham gia.")
+        setErr(data.message || "Bạn không được phép tham gia.");
       }
     } catch (error) {
-      console.error("Lỗi khi gọi API:", error)
-      setErr("Không thể kết nối tới máy chủ. Vui lòng thử lại sau.")
+      console.error("Lỗi khi gọi API:", error);
+      setErr("Không thể kết nối tới máy chủ. Vui lòng thử lại sau.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-lottery-primary via-lottery-secondary to-lottery-accent">
@@ -83,7 +82,9 @@ export default function Home() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-block relative">
-              <h1 className="text-5xl font-black text-lottery-text mb-2 animate-glow text-nowrap">🎰 QUAY THƯỞNG</h1>
+              <h1 className="text-5xl font-black text-lottery-text mb-2 animate-glow text-nowrap">
+                🎰 QUAY THƯỞNG
+              </h1>
               <div className="absolute -inset-2 bg-lottery-glow rounded-lg blur opacity-20 animate-pulse"></div>
             </div>
             <p className="text-lottery-text-secondary text-lg font-semibold mt-4 animate-fade-in-up delay-500">
@@ -144,7 +145,9 @@ export default function Home() {
 
               {err && (
                 <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-3 animate-shake">
-                  <p className="text-red-500 text-sm text-center font-semibold">⚠️ {err}</p>
+                  <p className="text-red-500 text-sm text-center font-semibold">
+                    ⚠️ {err}
+                  </p>
                 </div>
               )}
 
@@ -155,7 +158,9 @@ export default function Home() {
                 className="w-full relative group overflow-hidden bg-gradient-to-r from-lottery-button-start to-lottery-button-end hover:from-lottery-button-end hover:to-lottery-button-start text-lottery-button-text font-black py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                <span className="relative text-xl uppercase tracking-wider">🎯 Tham Gia Ngay</span>
+                <span className="relative text-xl uppercase tracking-wider">
+                  🎯 Tham Gia Ngay
+                </span>
               </button>
 
               {/* Decorative Elements */}
@@ -176,5 +181,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  )
+  );
 }

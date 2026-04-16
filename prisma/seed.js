@@ -1,19 +1,19 @@
-import { prisma } from '../src/lib/prisma.js'; // nếu dùng module ESM
-import bcrypt from 'bcryptjs';
+import { prisma } from "../src/lib/prisma.js"; // nếu dùng module ESM
+import bcrypt from "bcryptjs";
 
 async function main() {
-  const passwordHash = await bcrypt.hash('Toyota@123', 10);
+  const passwordHash = await bcrypt.hash("Toyota@123", 10);
 
   await prisma.admin.upsert({
-    where: { username: 'admin' },
+    where: { username: "admin" },
     update: {},
     create: {
-      username: 'mkt@toyota.binhduong.vn',
+      username: "mkt@toyotabinhduong.com.vn",
       passwordHash,
     },
   });
 
-  console.log('✅ Tài khoản admin đã được tạo: admin / Toyota@123');
+  console.log("✅ Tài khoản admin đã được tạo: admin / Toyota@123");
 }
 
 main()

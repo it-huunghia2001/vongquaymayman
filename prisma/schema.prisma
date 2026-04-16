@@ -3,30 +3,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL") // ví dụ: postgresql://username:password@host:port/dbname
+  provider = "mysql" // 1. Chuyển từ postgresql sang mysql
+  url      = env("DATABASE_URL") // Ví dụ: mysql://user:password@host:port/dbname
 }
 
 model Admin {
   id           Int    @id @default(autoincrement())
-  username     String @unique
-  passwordHash String
+  username     String @unique @db.VarChar(191)
+  passwordHash String @db.VarChar(255)
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  name          String
-  phone         String   
-  hasSpun       Boolean  @default(false)
-  prize         String?
-  createdAt     DateTime @default(now())
-  deviceKey     String?  @unique
-  licensePlate2 String?  @unique
+  id        Int      @id @default(autoincrement())
+  // Dùng Text để chứa chuỗi mã hóa thoải mái không lo giới hạn độ dài
+  name      String   @db.Text
+  phone     String   @db.Text
+  hasSpun   Boolean  @default(false)
+  prize     String?  @db.VarChar(255)
+  createdAt DateTime @default(now())
+  deviceKey String?  @unique @db.VarChar(191)
+
+  // Biển số xe không mã hóa nên để VarChar để có thể đặt @unique
+  licensePlate2 String? @unique @db.VarChar(191)
 }
 
 model PrizeConfig {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @db.VarChar(255)
   ratio     Float
   quantity  Int      @default(0)
   remaining Int      @default(0)
@@ -35,25 +38,26 @@ model PrizeConfig {
 
 model SpinHistory {
   id          Int      @id @default(autoincrement())
-  phone       String
-  prize       String
-  ip          String?
-  userAgent   String?
-  deviceKey   String?
-  plateNumber String?
+  name        String   @db.Text // Dùng Text nếu mã hóa name
+  phone       String   @db.Text
+  prize       String   @db.VarChar(255)
+  ip          String?  @db.VarChar(45)
+  userAgent   String?  @db.Text // Dùng Text vì User Agent thường rất dài
+  deviceKey   String?  @db.VarChar(191)
+  plateNumber String?  @db.VarChar(50)
   createdAt   DateTime @default(now())
 }
 
 model CardTopup {
   id        Int      @id @default(autoincrement())
-  phone     String
-  provider  String
+  phone     String   @db.VarChar(20)
+  provider  String   @db.VarChar(50)
   amount    Int
-  code      String
-  serial    String
-  requestId String   @unique
+  code      String   @db.VarChar(100)
+  serial    String   @db.VarChar(100)
+  requestId String   @unique @db.VarChar(191)
   status    Int
-  message   String?
-  transId   String?
+  message   String?  @db.VarChar(255)
+  transId   String?  @db.VarChar(191)
   createdAt DateTime @default(now())
 }

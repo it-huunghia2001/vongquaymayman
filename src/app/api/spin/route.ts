@@ -47,7 +47,7 @@ async function sendLowStockMail(prizeName: string, quantity: number) {
 // 🎯 HÀM RANDOM THEO TRỌNG SỐ
 // ===============================
 function pickPrizeByRatio(
-  prizes: { id: number; name: string; ratio: number }[]
+  prizes: { id: number; name: string; ratio: number }[],
 ) {
   const total = prizes.reduce((sum, p) => sum + p.ratio, 0);
   const random = Math.random() * total;
@@ -72,14 +72,14 @@ export async function POST(req: Request) {
     if (!phone) {
       return NextResponse.json(
         { success: false, message: "Thiếu số điện thoại" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!plateNumber) {
       return NextResponse.json(
         { success: false, message: "Thiếu biển số xe" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -98,7 +98,7 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json(
         { success: false, message: "Người dùng không tồn tại" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -132,7 +132,7 @@ export async function POST(req: Request) {
     if (!prizes.length) {
       return NextResponse.json(
         { success: false, message: "Hết phần thưởng." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -168,6 +168,7 @@ export async function POST(req: Request) {
             phone: encryptedPhone,
             prize: updated.name,
             ip: String(ip),
+            name: user.name,
             userAgent,
             plateNumber: normalizedPlate,
             ...(deviceKey ? { deviceKey } : {}),
@@ -178,7 +179,7 @@ export async function POST(req: Request) {
       },
       {
         timeout: 15000, // tăng lên 15 giây
-      }
+      },
     );
 
     return NextResponse.json({
@@ -191,7 +192,7 @@ export async function POST(req: Request) {
     console.error("🔥 Lỗi khi xử lý quay thưởng:", error);
     return NextResponse.json(
       { success: false, message: error.message || "Lỗi máy chủ" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,20 +1,20 @@
 // prisma/seed.ts
-import { prisma } from '../src/lib/prisma';
-import bcrypt from 'bcryptjs';
+import { prisma } from "../src/lib/prisma";
+import bcrypt from "bcryptjs";
 
 async function main() {
-  const passwordHash = await bcrypt.hash('Toyota@123', 10);
+  const passwordHash = await bcrypt.hash("Toyota@123", 10);
 
   await prisma.admin.upsert({
-    where: { username: 'admin' },
+    where: { username: "admin" },
     update: {},
     create: {
-      username: 'mkt@toyota.binhduong.vn',
+      username: "mkt@toyotabinhduong.com.vn",
       passwordHash,
     },
   });
 
-  console.log('✅ Tài khoản admin đã được tạo: admin / admin123');
+  console.log("✅ Tài khoản admin đã được tạo: admin / admin123");
 }
 
 main().catch((e) => {
