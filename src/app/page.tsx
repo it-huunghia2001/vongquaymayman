@@ -116,7 +116,7 @@ export default function Home() {
 
                 <div className="relative">
                   <label className="block text-lottery-text font-bold mb-2 text-sm uppercase tracking-wide">
-                    🚗 Biển số xe
+                    🚗 Số Hợp Đồng
                   </label>
                   <input
                     type="text"

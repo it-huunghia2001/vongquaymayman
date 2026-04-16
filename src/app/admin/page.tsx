@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
-import { LoadingModal } from '@/components/modalLoading';
-import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+"use client";
+import { LoadingModal } from "@/components/modalLoading";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 export default function AdminPage() {
   type Prize = {
@@ -37,25 +37,24 @@ export default function AdminPage() {
     percent: number;
     prizeStats: PrizeStat[];
   } | null>(null);
-  const [loading, setLoading]= useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [page, setPage] = useState(1);
   const [limit] = useState(10); // số user mỗi trang
   const [totalPages, setTotalPages] = useState(1);
 
-  const [name, setName] = useState('');
-  const [ratio, setRatio] = useState('');
-  const [quantity, setQuantity] = useState(''); // 🆕 thêm state
+  const [name, setName] = useState("");
+  const [ratio, setRatio] = useState("");
+  const [quantity, setQuantity] = useState(""); // 🆕 thêm state
 
- 
   const fetchPrizes = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/prizes');
+      const res = await fetch("/api/admin/prizes");
       const data = await res.json();
       setPrizes(data);
     } catch (err) {
-      console.error('❌ Lỗi fetchPrizes:', err);
+      console.error("❌ Lỗi fetchPrizes:", err);
     } finally {
       setLoading(false);
     }
@@ -64,7 +63,9 @@ export default function AdminPage() {
   const fetchUsers = async (pageNum = 1) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/users?page=${pageNum}&limit=${limit}`);
+      const res = await fetch(
+        `/api/admin/users?page=${pageNum}&limit=${limit}`,
+      );
       const data = await res.json();
       setUsers(data.users);
       setStats({
@@ -76,7 +77,7 @@ export default function AdminPage() {
       setTotalPages(data.pagination.totalPages);
       setPage(data.pagination.page);
     } catch (err) {
-      console.error('❌ Lỗi fetchUsers:', err);
+      console.error("❌ Lỗi fetchUsers:", err);
     } finally {
       setLoading(false);
     }
@@ -85,20 +86,20 @@ export default function AdminPage() {
   const addPrize = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/prizes', {
-        method: 'POST',
+      const res = await fetch("/api/admin/prizes", {
+        method: "POST",
         body: JSON.stringify({ name, ratio, quantity }),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
 
       if (res.ok) {
-        setName('');
-        setRatio('');
-        setQuantity('');
+        setName("");
+        setRatio("");
+        setQuantity("");
         await fetchPrizes();
       }
     } catch (err) {
-      console.error('❌ Lỗi addPrize:', err);
+      console.error("❌ Lỗi addPrize:", err);
     } finally {
       setLoading(false);
     }
@@ -108,19 +109,19 @@ export default function AdminPage() {
     const handleExport = async () => {
       setLoading(true);
       try {
-        const res = await fetch('/api/admin/users/export');
-        if (!res.ok) throw new Error('Lỗi khi export Excel');
+        const res = await fetch("/api/admin/users/export");
+        if (!res.ok) throw new Error("Lỗi khi export Excel");
         const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.download = 'report.xlsx';
+        link.download = "report.xlsx";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       } catch (err) {
-        console.error('❌ Export Excel thất bại:', err);
+        console.error("❌ Export Excel thất bại:", err);
       } finally {
         setLoading(false);
       }
@@ -132,27 +133,34 @@ export default function AdminPage() {
     fetchPrizes();
     fetchUsers();
   }, []);
- 
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <LoadingModal isOpen={loading}/>
-      <h1 className="text-3xl font-bold mb-4 text-center">🎛️ Quản lý phần thưởng & người dùng</h1>
+      <LoadingModal isOpen={loading} />
+      <h1 className="text-3xl font-bold mb-4 text-center">
+        🎛️ Quản lý phần thưởng & người dùng
+      </h1>
 
       {/* Thống kê tổng quan */}
       {stats && (
         <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
           <div className="bg-white shadow rounded p-4 border">
             <div className="text-sm text-gray-500">Tổng số người tham gia</div>
-            <div className="text-2xl font-bold text-blue-600">{stats.totalUsers}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {stats.totalUsers}
+            </div>
           </div>
           <div className="bg-white shadow rounded p-4 border">
             <div className="text-sm text-gray-500">Số người trúng thưởng</div>
-            <div className="text-2xl font-bold text-green-600">{stats.winners}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {stats.winners}
+            </div>
           </div>
           <div className="bg-white shadow rounded p-4 border">
             <div className="text-sm text-gray-500">% trúng thưởng</div>
-            <div className="text-2xl font-bold text-purple-600">{stats.percent}%</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {stats.percent}%
+            </div>
           </div>
         </div>
       )}
@@ -188,7 +196,9 @@ export default function AdminPage() {
             Thêm phần thưởng
           </button>
 
-          <h2 className="text-xl font-semibold mt-6 mb-2">🎁 Danh sách phần thưởng</h2>
+          <h2 className="text-xl font-semibold mt-6 mb-2">
+            🎁 Danh sách phần thưởng
+          </h2>
           <table className="w-full border text-sm">
             <thead>
               <tr className="bg-gray-200 text-center">
@@ -209,7 +219,9 @@ export default function AdminPage() {
                       onChange={(e) => {
                         const newName = e.target.value;
                         setPrizes((prev) =>
-                          prev.map((p) => (p.id === item.id ? { ...p, name: newName } : p))
+                          prev.map((p) =>
+                            p.id === item.id ? { ...p, name: newName } : p,
+                          ),
                         );
                       }}
                       className="w-full p-1 border rounded"
@@ -222,8 +234,10 @@ export default function AdminPage() {
                       onChange={(e) => {
                         setPrizes((prev) =>
                           prev.map((p) =>
-                            p.id === item.id ? { ...p, ratio: Number(e.target.value) } : p
-                          )
+                            p.id === item.id
+                              ? { ...p, ratio: Number(e.target.value) }
+                              : p,
+                          ),
                         );
                       }}
                       className="w-full p-1 border rounded text-right"
@@ -236,8 +250,10 @@ export default function AdminPage() {
                       onChange={(e) => {
                         setPrizes((prev) =>
                           prev.map((p) =>
-                            p.id === item.id ? { ...p, quantity: Number(e.target.value) } : p
-                          )
+                            p.id === item.id
+                              ? { ...p, quantity: Number(e.target.value) }
+                              : p,
+                          ),
                         );
                       }}
                       className="w-full p-1 border rounded text-right"
@@ -246,10 +262,10 @@ export default function AdminPage() {
                   <td className="flex justify-center gap-2 items-center px-4 h-12">
                     <button
                       onClick={async () => {
-                        await fetch('/api/admin/prizes', {
-                          method: 'PUT',
+                        await fetch("/api/admin/prizes", {
+                          method: "PUT",
                           body: JSON.stringify(item),
-                          headers: { 'Content-Type': 'application/json' },
+                          headers: { "Content-Type": "application/json" },
                         });
                         fetchPrizes();
                       }}
@@ -259,12 +275,12 @@ export default function AdminPage() {
                     </button>
                     <button
                       onClick={async () => {
-                        const confirmDelete = confirm('Xoá phần thưởng này?');
+                        const confirmDelete = confirm("Xoá phần thưởng này?");
                         if (!confirmDelete) return;
-                        await fetch('/api/admin/prizes', {
-                          method: 'DELETE',
+                        await fetch("/api/admin/prizes", {
+                          method: "DELETE",
                           body: JSON.stringify({ id: item.id }),
-                          headers: { 'Content-Type': 'application/json' },
+                          headers: { "Content-Type": "application/json" },
                         });
                         fetchPrizes();
                       }}
@@ -281,7 +297,9 @@ export default function AdminPage() {
 
         {/* Danh sách người dùng */}
         <div>
-          <h2 className="text-xl font-semibold mb-2">🧑‍💼 Danh sách người dùng</h2>
+          <h2 className="text-xl font-semibold mb-2">
+            🧑‍💼 Danh sách người dùng
+          </h2>
           <ExportButton />
           {/* Bảng User */}
           <table className="w-full border text-sm">
@@ -289,7 +307,7 @@ export default function AdminPage() {
               <tr className="bg-gray-200 text-center">
                 <th className="p-2 border">Tên</th>
                 <th className="p-2 border">SĐT</th>
-                <th className="p-2 border">biển số xe</th>
+                <th className="p-2 border">Số Hợp đồng</th>
                 <th className="p-2 border">Phần thưởng</th>
                 <th className="p-2 border">Ngày tham gia</th>
               </tr>
@@ -300,8 +318,10 @@ export default function AdminPage() {
                   <td className="p-2 border">{user.name}</td>
                   <td className="p-2 border">{user.phone}</td>
                   <td className="p-2 border">{user.licensePlate}</td>
-                  <td className="p-2 border">{user.prize || '—'}</td>
-                  <td className="p-2 border">{new Date(user.createdAt).toLocaleString()}</td>
+                  <td className="p-2 border">{user.prize || "—"}</td>
+                  <td className="p-2 border">
+                    {new Date(user.createdAt).toLocaleString()}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -330,11 +350,12 @@ export default function AdminPage() {
             </button>
           </div>
 
-
           {/* Thống kê phần thưởng đã trúng */}
           {stats && (
             <div className="mt-6">
-              <h2 className="text-xl font-semibold mb-2">📊 Thống kê phần thưởng đã trúng</h2>
+              <h2 className="text-xl font-semibold mb-2">
+                📊 Thống kê phần thưởng đã trúng
+              </h2>
               <table className="w-full border text-sm">
                 <thead>
                   <tr className="bg-gray-200 text-center">
@@ -348,7 +369,9 @@ export default function AdminPage() {
                     <tr key={i} className="text-center">
                       <td className="p-2 border">{item.name}</td>
                       <td className="p-2 border">{item.ratio}</td>
-                      <td className="p-2 border text-green-700 font-semibold">{item.used}</td>
+                      <td className="p-2 border text-green-700 font-semibold">
+                        {item.used}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

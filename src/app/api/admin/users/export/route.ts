@@ -67,7 +67,7 @@ export async function GET() {
           prize: h.prize,
           createdAt: h.createdAt,
         };
-      })
+      }),
     );
 
     // 👉 Gom thống kê phần thưởng (normalize để gộp tên trùng)
@@ -95,13 +95,13 @@ export async function GET() {
       new Set([
         ...Object.keys(prizeCountsMap),
         ...prizeConfigs.map((c) => normalizePrizeName(c.name)),
-      ])
+      ]),
     );
 
     const detailedPrizes = allPrizeNames.map((normalizedName) => {
       const used = prizeCountsMap[normalizedName] ?? 0;
       const matchedConfig = prizeConfigs.find(
-        (c) => normalizePrizeName(c.name) === normalizedName
+        (c) => normalizePrizeName(c.name) === normalizedName,
       );
 
       const displayName =
@@ -133,7 +133,7 @@ export async function GET() {
     winnerSheet.columns = [
       { header: "Tên", key: "name", width: 25 },
       { header: "SĐT", key: "phone", width: 20 },
-      { header: "Biển số xe", key: "licensePlate", width: 20 },
+      { header: "Số hợp đồng", key: "licensePlate", width: 20 },
       { header: "Phần thưởng", key: "prize", width: 25 },
       { header: "Ngày tham gia", key: "createdAt", width: 25 },
     ];
@@ -145,7 +145,7 @@ export async function GET() {
         licensePlate: w.licensePlate,
         prize: w.prize,
         createdAt: new Date(w.createdAt).toLocaleString("vi-VN"),
-      })
+      }),
     );
 
     // Sheet thống kê prize
@@ -174,7 +174,7 @@ export async function GET() {
     console.error("❌ Lỗi khi export Excel:", error);
     return NextResponse.json(
       { error: "Server error", details: String(error) },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

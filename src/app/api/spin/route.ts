@@ -78,7 +78,7 @@ export async function POST(req: Request) {
 
     if (!plateNumber) {
       return NextResponse.json(
-        { success: false, message: "Thiếu biển số xe" },
+        { success: false, message: "Thiếu số hợp đồng" },
         { status: 400 },
       );
     }
@@ -118,7 +118,7 @@ export async function POST(req: Request) {
         success: true,
         prize: spunToday.prize,
         message:
-          "Số điện thoại hoặc biển số xe này đã quay hôm nay, hãy quay lại vào ngày mai!",
+          "Số điện thoại hoặc số hợp đồng này đã quay hôm nay, hãy quay lại vào ngày mai!",
         alreadySpun: true,
       });
     }

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { encrypt } from '@/lib/crypto';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { encrypt } from "@/lib/crypto";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -17,8 +17,8 @@ export async function POST(req: Request) {
     // Bắt buộc phải có biển số xe
     if (!licensePlate) {
       return NextResponse.json(
-        { allowed: false, message: 'Phải nhập biển số xe!' },
-        { status: 400 }
+        { allowed: false, message: "Phải nhập số hợp đồng!" },
+        { status: 400 },
       );
     }
 
@@ -33,8 +33,8 @@ export async function POST(req: Request) {
     });
 
     // Ngày hôm nay theo múi giờ VN
-    const startOfDay = dayjs().tz('Asia/Ho_Chi_Minh').startOf('day').toDate();
-    const endOfDay = dayjs().tz('Asia/Ho_Chi_Minh').endOf('day').toDate();
+    const startOfDay = dayjs().tz("Asia/Ho_Chi_Minh").startOf("day").toDate();
+    const endOfDay = dayjs().tz("Asia/Ho_Chi_Minh").endOf("day").toDate();
 
     // Nếu user đã tồn tại → kiểm tra đã quay trong ngày chưa (chỉ theo biển số)
     if (user) {
@@ -49,17 +49,17 @@ export async function POST(req: Request) {
         return NextResponse.json(
           {
             allowed: false,
-            message: 'Biển số xe này đã quay thưởng hôm nay!',
+            message: "Biển số xe này đã quay thưởng hôm nay!",
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
     } else {
       // Nếu chưa có user thì tạo mới
       user = await prisma.user.create({
         data: {
-          name: encryptedName ?? 'Người dùng',
-          phone: encryptedPhone ?? '',
+          name: encryptedName ?? "Người dùng",
+          phone: encryptedPhone ?? "",
           licensePlate2: normalizedPlate,
           hasSpun: false,
         },
@@ -69,10 +69,10 @@ export async function POST(req: Request) {
     // Nếu tới đây thì user chưa quay hôm nay → cho phép tham gia
     return NextResponse.json({ allowed: true, userId: user.id });
   } catch (error) {
-    console.error('Lỗi khi kiểm tra/tạo user:', error);
+    console.error("Lỗi khi kiểm tra/tạo user:", error);
     return NextResponse.json(
-      { allowed: false, message: 'Lỗi server!' },
-      { status: 500 }
+      { allowed: false, message: "Lỗi server!" },
+      { status: 500 },
     );
   }
 }
