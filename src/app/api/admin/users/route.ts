@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { decrypt } from "@/lib/crypto";
-import { requireAdmin } from "../prizes/route";
+import { requireAdmin } from "@/lib/auth";
 
 function normalizePrizeName(name: string): string {
   return name
@@ -16,7 +16,8 @@ function normalizePrizeName(name: string): string {
 
 export async function GET(req: Request) {
   try {
-    if (!requireAdmin()) {
+    const isAdmin = await requireAdmin();
+    if (!isAdmin) {
       return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
     }
 

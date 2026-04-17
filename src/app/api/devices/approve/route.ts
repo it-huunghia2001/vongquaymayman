@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { requireAdmin } from "../../admin/prizes/route";
-
+import { requireAdmin } from "@/lib/auth";
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
-  if (!requireAdmin()) {
+  const isAdmin = await requireAdmin();
+  if (!isAdmin) {
     return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
   }
-
   try {
     const { id, status } = await req.json(); // action: 'APPROVED' hoặc 'REJECTED'
     const updated = await prisma.deviceRequest.update({

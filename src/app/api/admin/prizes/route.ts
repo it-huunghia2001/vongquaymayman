@@ -1,17 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { cookies } from "next/headers";
-
-export async function requireAdmin() {
-  const cookieStore = await cookies(); // ✅ thêm await
-  const token = cookieStore.get("admin_token");
-
-  if (!token || token.value !== "secure_token_here") {
-    return false;
-  }
-
-  return true;
-}
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET() {
   const prizes = await prisma.prizeConfig.findMany({ orderBy: { id: "asc" } });
@@ -19,7 +8,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  if (!requireAdmin()) {
+  const isAdmin = await requireAdmin();
+  if (!isAdmin) {
     return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
   }
 

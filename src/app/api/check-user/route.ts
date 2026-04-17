@@ -6,14 +6,15 @@ import { encrypt } from "@/lib/crypto";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { requireAdmin } from "../admin/prizes/route";
+import { requireAdmin } from "@/lib/auth";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export async function POST(req: Request) {
   try {
-    if (!requireAdmin()) {
+    const isAdmin = await requireAdmin();
+    if (!isAdmin) {
       return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
     }
 
