@@ -680,7 +680,7 @@ export default function AdminPage() {
                     <tr>
                       <th>Họ tên</th>
                       <th>Số điện thoại</th>
-                      <th>Số hợp đồng</th>
+                      <th>Số CCCD</th>
                       <th>Phần thưởng</th>
                       <th>Ngày tham gia</th>
                     </tr>

@@ -133,7 +133,7 @@ export async function GET() {
     winnerSheet.columns = [
       { header: "Tên", key: "name", width: 25 },
       { header: "SĐT", key: "phone", width: 20 },
-      { header: "Số hợp đồng", key: "licensePlate", width: 20 },
+      { header: "Số CCCD", key: "licensePlate", width: 20 },
       { header: "Phần thưởng", key: "prize", width: 25 },
       { header: "Ngày tham gia", key: "createdAt", width: 25 },
     ];

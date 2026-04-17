@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     // Bắt buộc phải có biển số xe
     if (!licensePlate) {
       return NextResponse.json(
-        { allowed: false, message: "Phải nhập số hợp đồng!" },
+        { allowed: false, message: "Phải nhập Số CCCD!" },
         { status: 400 },
       );
     }

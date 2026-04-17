@@ -116,15 +116,15 @@ export default function Home() {
 
                 <div className="relative">
                   <label className="block text-lottery-text font-bold mb-2 text-sm uppercase tracking-wide">
-                    🚗 Số Hợp Đồng
+                    🚗 Số CCCD
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     required
                     value={licensePlate2}
                     onChange={(e) => setLicensePlate2(e.target.value)}
                     className="w-full px-4 py-3 bg-lottery-input border-2 border-lottery-border rounded-xl focus:outline-none focus:border-lottery-glow focus:ring-2 focus:ring-lottery-glow/20 text-lottery-text font-semibold placeholder-lottery-text-secondary/60 transition-all duration-300"
-                    placeholder="Nhập họ tên của bạn"
+                    placeholder="Nhập Số CCCD"
                   />
                 </div>
 
@@ -136,6 +136,8 @@ export default function Home() {
                     type="tel"
                     required
                     value={phone}
+                    inputMode="numeric"
+                    maxLength={10}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full px-4 py-3 bg-lottery-input border-2 border-lottery-border rounded-xl focus:outline-none focus:border-lottery-glow focus:ring-2 focus:ring-lottery-glow/20 text-lottery-text font-semibold placeholder-lottery-text-secondary/60 transition-all duration-300"
                     placeholder="Nhập số điện thoại"

@@ -78,7 +78,7 @@ export async function POST(req: Request) {
 
     if (!plateNumber) {
       return NextResponse.json(
-        { success: false, message: "Thiếu số hợp đồng" },
+        { success: false, message: "Thiếu Số CCCD" },
         { status: 400 },
       );
     }
@@ -118,7 +118,7 @@ export async function POST(req: Request) {
         success: true,
         prize: spunToday.prize,
         message:
-          "Số điện thoại hoặc số hợp đồng này đã quay hôm nay, hãy quay lại vào ngày mai!",
+          "Số điện thoại hoặc Số CCCD này đã quay hôm nay, hãy quay lại vào ngày mai!",
         alreadySpun: true,
       });
     }
