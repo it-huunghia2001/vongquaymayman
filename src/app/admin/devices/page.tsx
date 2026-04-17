@@ -29,7 +29,7 @@ export default function AdminDeviceManager() {
   const handleAction = async (id: string, status: string) => {
     setActionId(id);
     try {
-      const res = await fetch("/api/devices/update", {
+      const res = await fetch("/api/devices/approve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, status }),
