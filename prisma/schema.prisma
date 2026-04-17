@@ -61,3 +61,11 @@ model CardTopup {
   transId   String?  @db.VarChar(191)
   createdAt DateTime @default(now())
 }
+
+model DeviceRequest {
+  id                String   @id @default(cuid())
+  deviceFingerprint String   @unique // Mã định danh trình duyệt
+  deviceName        String? // Tên máy để bạn dễ phân biệt (ví dụ: "Máy kế toán")
+  status            String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt         DateTime @default(now())
+}

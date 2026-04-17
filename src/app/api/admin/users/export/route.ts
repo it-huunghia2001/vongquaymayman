@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { decrypt } from "@/lib/crypto";
 import ExcelJS from "exceljs";
+import { requireAdmin } from "../../prizes/route";
 
 // 🔹 Hàm chuẩn hóa tên phần thưởng
 function normalizePrizeName(name: string): string {
@@ -16,6 +17,10 @@ function normalizePrizeName(name: string): string {
 }
 
 export async function GET() {
+  if (!requireAdmin()) {
+    return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
+  }
+
   try {
     // 👉 Lấy tất cả lịch sử quay có prize
     const histories = await prisma.spinHistory.findMany({

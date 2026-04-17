@@ -3,6 +3,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { decrypt } from "@/lib/crypto";
+import { requireAdmin } from "../prizes/route";
 
 function normalizePrizeName(name: string): string {
   return name
@@ -15,6 +16,10 @@ function normalizePrizeName(name: string): string {
 
 export async function GET(req: Request) {
   try {
+    if (!requireAdmin()) {
+      return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
+    }
+
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "20", 10);
@@ -63,7 +68,7 @@ export async function GET(req: Request) {
           hasSpun: user?.hasSpun ?? false,
           createdAt: h.createdAt,
         };
-      })
+      }),
     );
 
     // 👉 Lấy toàn bộ phần thưởng từng xuất hiện (để không mất phần thưởng cũ)
@@ -95,14 +100,14 @@ export async function GET(req: Request) {
       new Set([
         ...Object.keys(prizeCountsMap),
         ...prizeConfigs.map((c) => normalizePrizeName(c.name)),
-      ])
+      ]),
     );
 
     // 👉 Tạo thống kê chi tiết
     const detailedPrizes = allPrizeNames.map((normalizedName) => {
       const used = prizeCountsMap[normalizedName] ?? 0;
       const matchedConfig = prizeConfigs.find(
-        (c) => normalizePrizeName(c.name) === normalizedName
+        (c) => normalizePrizeName(c.name) === normalizedName,
       );
 
       const displayName =
@@ -141,7 +146,7 @@ export async function GET(req: Request) {
     console.error("❌ Lỗi khi thống kê winners:", error);
     return NextResponse.json(
       { error: "Server error", details: String(error) },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

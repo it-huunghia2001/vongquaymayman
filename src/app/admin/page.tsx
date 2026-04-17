@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { LoadingModal } from "@/components/modalLoading";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Prize = {
@@ -481,6 +482,12 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          <div>
+            <Link href="/admin/devices">
+              <button className="adm-btn-add">Người dùng</button>
+            </Link>
+          </div>
 
           <div className="adm-grid">
             {/* ── Left column ── */}
