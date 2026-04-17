@@ -8,11 +8,6 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const isAdmin = await requireAdmin();
-  if (!isAdmin) {
-    return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
-  }
-
   const { name, ratio, quantity } = await req.json();
   if (!name || !ratio || quantity == null) {
     return NextResponse.json({ error: "Thiếu dữ liệu" }, { status: 400 });

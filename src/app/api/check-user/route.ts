@@ -13,11 +13,6 @@ dayjs.extend(timezone);
 
 export async function POST(req: Request) {
   try {
-    const isAdmin = await requireAdmin();
-    if (!isAdmin) {
-      return NextResponse.json({ error: "Không có quyền" }, { status: 403 });
-    }
-
     const { name, phone, licensePlate } = await req.json();
 
     // Bắt buộc phải có biển số xe
