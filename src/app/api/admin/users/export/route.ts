@@ -6,6 +6,15 @@ import { decrypt } from "@/lib/crypto";
 import ExcelJS from "exceljs";
 import { requireAdmin } from "@/lib/auth";
 
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const VN_TIMEZONE = "Asia/Ho_Chi_Minh";
+
 // 🔹 Hàm chuẩn hóa tên phần thưởng
 function normalizePrizeName(name: string): string {
   return name
@@ -143,15 +152,18 @@ export async function GET() {
       { header: "Ngày tham gia", key: "createdAt", width: 25 },
     ];
 
-    winners.forEach((w) =>
+    winners.forEach((w) => {
+      // Chuyển UTC sang giờ VN nhưng xuất ra object Date để ExcelJS xử lý đúng kiểu dữ liệu
+      const dateVN = dayjs(w.createdAt).tz(VN_TIMEZONE).toDate();
+
       winnerSheet.addRow({
         name: w.name,
         phone: w.phone,
         licensePlate: w.licensePlate,
         prize: w.prize,
-        createdAt: new Date(w.createdAt).toLocaleString("vi-VN"),
-      }),
-    );
+        createdAt: dateVN,
+      });
+    });
 
     // Sheet thống kê prize
     prizeSheet.columns = [
